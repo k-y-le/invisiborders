@@ -23,6 +23,7 @@ Adafruit_GPS GPS(&Serial1);
 // off by default!
 boolean usingInterrupt = false;
 
+// TODO: upload data about state boundaries and such
 //--------------------------------------------------|
 //                    WAYPOINTS                     |
 //--------------------------------------------------|
@@ -51,9 +52,10 @@ float tripDistance;
 boolean isStarted = false;
 
 // Set the first variable to the NUMBER of pixels. 25 = 25 pixels in a row
+// set this to number used in sewing (TODO)
 Adafruit_FloraPixel strip = Adafruit_FloraPixel(2);
 
-
+// what exactly is this doing?
 uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 161, 172, 182, 192, 202, 211, 220,
   228, 236, 242, 247, 251, 254, 255, 255, 254, 251, 247, 242, 236, 228, 220, 211,
   202, 192, 182, 172, 161, 151, 141, 131, 121, 112, 103,  95,  87,  80,  73,  66,
@@ -122,7 +124,7 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
       return;  // we can fail to parse a sentence in which case we should just wait for another
     }
 
-
+    // TODO: what exactly does GPS.fix mean?
     if (GPS.fix) {
       //Serial.print("Location: ");
       //Serial.print(GPS.latitude, 2); Serial.print(GPS.lat);
@@ -132,6 +134,7 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
       float fLat = decimalDegrees(GPS.latitude, GPS.lat);
       float fLon = decimalDegrees(GPS.longitude, GPS.lon);
 
+      // TODO: how to change the logic so that it's not just based upon a single point (destination), but a series of points? border
       if (!isStarted) {
         isStarted = true;
         tripDistance = (double)calc_dist(fLat, fLon, targetLat, targetLon);
@@ -145,6 +148,7 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
     headingDirection(calc_bearing(fLat, fLon, targetLat, targetLon)-GPS.angle+360);
   }*/
 
+  // TODO: currently distance to a certain point, how do we make sure it calculates distance to all points in a line? algorithms!!
   headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
   //Serial.print("Distance Remaining:"); Serial.println((double)calc_dist(fLat, fLon, targetLat, targetLon));
 
@@ -260,6 +264,7 @@ void headingDistance(float fDist)
 {
   //Use this part of the code to determine how far you are away from the destination.
   //The total trip distance (from where you started) is divided into five trip segments.
+  // TODO: alter this for functionality with series of points, not just one point
   Serial.println(fDist);
   if ((fDist >= DESTINATION_DISTANCE)) { // You are now within 5 meters of your destination.
     //Serial.println("Trip Distance: 1");
@@ -317,6 +322,7 @@ float decimalDegrees(float nmeaCoord, char dir) {
   return (wholeDegrees + (nmeaCoord - 100.0*wholeDegrees)/60.0) * modifier;
 }
 
+// TODO: figure out what this stuff means
 void breath()
 {
   uniformBreathe(LED_Breathe_Table, BREATHE_TABLE_SIZE, BREATHE_UPDATE, 127, 127, 127);
