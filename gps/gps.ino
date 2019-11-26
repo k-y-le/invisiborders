@@ -149,6 +149,8 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
   }*/
 
   // TODO: currently distance to a certain point, how do we make sure it calculates distance to all points in a line? algorithms!!
+  // plan: what if i made it so that it only lights up when a certain distance from the border? anything 20m from border works
+  // iterate thru the coordinates of borders for the state, and check to see if it works for those ones !!
   headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
   //Serial.print("Distance Remaining:"); Serial.println((double)calc_dist(fLat, fLon, targetLat, targetLon));
 
@@ -322,7 +324,6 @@ float decimalDegrees(float nmeaCoord, char dir) {
   return (wholeDegrees + (nmeaCoord - 100.0*wholeDegrees)/60.0) * modifier;
 }
 
-// TODO: figure out what this stuff means
 void breath()
 {
   uniformBreathe(LED_Breathe_Table, BREATHE_TABLE_SIZE, BREATHE_UPDATE, 127, 127, 127);
