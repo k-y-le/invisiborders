@@ -1,3 +1,5 @@
+#include <Adafruit_NeoPixel.h>
+
 // Flora GPS + LED Pixel Code
 //
 // This code shows how to listen to the GPS module in an interrupt
@@ -12,7 +14,7 @@
 
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
-#include "Adafruit_FloraPixel.h"
+#include <Adafruit_NeoPixel.h>
 Adafruit_GPS GPS(&Serial1);
 
 // Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
@@ -23,28 +25,19 @@ Adafruit_GPS GPS(&Serial1);
 // off by default!
 boolean usingInterrupt = false;
 
-// TODO: upload data about state boundaries and such
-//--------------------------------------------------|
-//                    WAYPOINTS                     |
-//--------------------------------------------------|
-//Please enter the latitude and longitude of your   |
-//desired destination:                              |
-#define GEO_LAT                44.995012
-#define GEO_LON               -93.228967
-//--------------------------------------------------|
-
 //--------------------------------------------------|
 //                    DISTANCE                      |
 //--------------------------------------------------|
 //Please enter the distance (in meters) from your   |
 //destination that you want your LEDs to light up:  |
-#define DESTINATION_DISTANCE   20
+#define DESTINATION_DISTANCE   100
 //--------------------------------------------------|
-
+// the number of points to be considered
+#define BORDER_POINTS   1
 
 // Navigation location
-float targetLat = GEO_LAT;
-float targetLon = GEO_LON;
+float targetLat [BORDER_POINTS] = {40.409554};
+float targetLon [BORDER_POINTS] = {-74.637430};
 
 // Trip distance
 float tripDistance;
@@ -53,7 +46,10 @@ boolean isStarted = false;
 
 // Set the first variable to the NUMBER of pixels. 25 = 25 pixels in a row
 // set this to number used in sewing (TODO)
-Adafruit_FloraPixel strip = Adafruit_FloraPixel(2);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(2);
+
+int i;
+int test;
 
 // what exactly is this doing?
 uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 161, 172, 182, 192, 202, 211, 220,
@@ -124,7 +120,6 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
       return;  // we can fail to parse a sentence in which case we should just wait for another
     }
 
-    // TODO: what exactly does GPS.fix mean?
     if (GPS.fix) {
       //Serial.print("Location: ");
       //Serial.print(GPS.latitude, 2); Serial.print(GPS.lat);
@@ -134,10 +129,9 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
       float fLat = decimalDegrees(GPS.latitude, GPS.lat);
       float fLon = decimalDegrees(GPS.longitude, GPS.lon);
 
-      // TODO: how to change the logic so that it's not just based upon a single point (destination), but a series of points? border
       if (!isStarted) {
         isStarted = true;
-        tripDistance = (double)calc_dist(fLat, fLon, targetLat, targetLon);
+        tripDistance = (double)calc_dist(fLat, fLon, targetLat[0], targetLon[0]);
       }
 
       //Uncomment below if you want your Flora to navigate to a certain destination.  Then modify the headingDirection function.
@@ -149,9 +143,11 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
   }*/
 
   // TODO: currently distance to a certain point, how do we make sure it calculates distance to all points in a line? algorithms!!
-  // plan: what if i made it so that it only lights up when a certain distance from the border? anything 20m from border works
-  // iterate thru the coordinates of borders for the state, and check to see if it works for those ones !!
-  headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
+  int i;
+  for (i = 0; i < BORDER_POINTS; i++) {
+    headingDistance((double)calc_dist(fLat, fLon, targetLat[i], targetLon[i]));
+  }
+//  headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
   //Serial.print("Distance Remaining:"); Serial.println((double)calc_dist(fLat, fLon, targetLat, targetLon));
 
 }
