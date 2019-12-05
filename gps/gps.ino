@@ -33,11 +33,12 @@ boolean usingInterrupt = false;
 #define DESTINATION_DISTANCE   100
 //--------------------------------------------------|
 // the number of points to be considered
-#define BORDER_POINTS   1
+// maximum size (for now) is 1301 for float, long; 2597 for int
+#define BORDER_POINTS   392
 
 // Navigation location
-float targetLat [BORDER_POINTS] = {40.409554};
-float targetLon [BORDER_POINTS] = {-74.637430};
+float targetLat [BORDER_POINTS] = {40.348389};
+float targetLon [BORDER_POINTS] = {-74.651120};
 
 // Trip distance
 float tripDistance;
@@ -45,13 +46,12 @@ float tripDistance;
 boolean isStarted = false;
 
 // Set the first variable to the NUMBER of pixels. 25 = 25 pixels in a row
-// set this to number used in sewing (TODO)
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(2);
+// set this to number used in sewing
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(1);
 
 int i;
 int test;
 
-// what exactly is this doing?
 uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 161, 172, 182, 192, 202, 211, 220,
   228, 236, 242, 247, 251, 254, 255, 255, 254, 251, 247, 242, 236, 228, 220, 211,
   202, 192, 182, 172, 161, 151, 141, 131, 121, 112, 103,  95,  87,  80,  73,  66,
@@ -142,12 +142,11 @@ uint8_t LED_Breathe_Table[]  = {   80,  87,  95, 103, 112, 121, 131, 141, 151, 1
     headingDirection(calc_bearing(fLat, fLon, targetLat, targetLon)-GPS.angle+360);
   }*/
 
-  // TODO: currently distance to a certain point, how do we make sure it calculates distance to all points in a line? algorithms!!
   int i;
   for (i = 0; i < BORDER_POINTS; i++) {
     headingDistance((double)calc_dist(fLat, fLon, targetLat[i], targetLon[i]));
   }
-//  headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
+  //  headingDistance((double)calc_dist(fLat, fLon, targetLat, targetLon));
   //Serial.print("Distance Remaining:"); Serial.println((double)calc_dist(fLat, fLon, targetLat, targetLon));
 
 }
@@ -262,7 +261,6 @@ void headingDistance(float fDist)
 {
   //Use this part of the code to determine how far you are away from the destination.
   //The total trip distance (from where you started) is divided into five trip segments.
-  // TODO: alter this for functionality with series of points, not just one point
   Serial.println(fDist);
   if ((fDist >= DESTINATION_DISTANCE)) { // You are now within 5 meters of your destination.
     //Serial.println("Trip Distance: 1");
@@ -275,7 +273,7 @@ void headingDistance(float fDist)
   }
 
 
-  if ((fDist < DESTINATION_DISTANCE)) { // You are now within 5 meters of your destination.
+  if ((fDist < DESTINATION_DISTANCE)) { // You are now within 50 (?) meters of your destination.
     //Serial.println("Trip Distance: 0");
     //Serial.println("Arrived at destination!");
     breath();
