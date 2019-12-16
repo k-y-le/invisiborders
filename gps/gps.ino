@@ -28,7 +28,7 @@ boolean usingInterrupt = false;
 //--------------------------------------------------|
 //Please enter the distance (in meters) from your   |
 //destination that you want your LEDs to light up:  |
-#define DESTINATION_DISTANCE   100
+#define DESTINATION_DISTANCE   55
 //--------------------------------------------------|
 // the number of points to be considered
 // maximum size (for now) is 1301 for float, long; 2597 for int
