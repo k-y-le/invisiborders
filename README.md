@@ -1,11 +1,11 @@
 # Invisiborders: Wearable Politics
-Learn more on the [website](https://www.invisiborders.com/)
-=====
-### [Kyle Barnes](https://www.kylebarn.es/) under mentorship of Professor Janet Vertesi.
-### Princeton Computer science independent work project - fall 2019
-### Presented as a WIP at [DIS2020](https://dis.acm.org/2020/)
-=====
-### How to use this code:
+
+##### Created by [Kyle Barnes](https://www.kylebarn.es/) under mentorship of Professor Janet Vertesi.
+##### Princeton Computer science independent work project - fall 2019
+##### Presented as a WIP at [DIS2020](https://dis.acm.org/2020/)
+##### Learn more on the [website](https://www.invisiborders.com/)
+## How to use this code:
+
 1. Download the [Arduino IDE](https://www.arduino.cc/en/Main/Software).
 2. Navigate to the Arduino Library Manager, and load the following libraries:
   - AdaFruit GPS Library
